@@ -129,7 +129,8 @@ function openAssistant() {
     },
     defaults: options
   };
-  Services.ww.openWindow(null, "chrome://paper-assistant/content/assistant.html", "paper-assistant", "chrome,centerscreen,resizable,width=1280,height=850", api);
+  const parent = Zotero.getMainWindow();
+  parent.openDialog("chrome://paper-assistant/content/assistant.html", "paper-assistant", "chrome,dialog,centerscreen,resizable,width=1280,height=850", api);
 }
 
 function install() {}
