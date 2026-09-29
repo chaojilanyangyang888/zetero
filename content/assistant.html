@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>论文翻译与对比方法解释</title>
+  <link rel="stylesheet" href="assistant.css">
+</head>
+<body>
+  <header><div><strong>Paper Format Translator</strong><span>保留原文结构 · 学术中文翻译 · 方法对比解释</span></div><button id="settingsBtn">设置</button></header>
+  <section id="settings" class="settings hidden">
+    <label>本地 Codex 地址 <input id="codexURL" type="url"></label>
+    <label>Codex Key <input id="codexKey" type="password"></label>
+    <label>Codex 模型 <select id="codexModel"><option value="auto">auto（自动路由）</option></select></label>
+    <label>自定义模型 <input id="codexModelCustom" type="text" placeholder="可选，覆盖下拉选项"></label>
+    <label>思考深度 <select id="reasoningEffort"><option value="auto">auto</option><option value="low">low</option><option value="medium">medium</option><option value="high">high</option></select></label>
+    <label>Google Translate Key <input id="googleKey" type="password"></label>
+    <button id="modelsBtn">读取模型</button><button id="testBtn">测试 Codex</button>
+    <button id="saveSettings">保存设置</button>
+  </section>
+  <main>
+    <aside>
+      <div class="aside-head"><h2>论文内容</h2><button id="loadBtn">读取选中 PDF</button></div>
+      <textarea id="source" placeholder="点击“读取选中 PDF”，或粘贴需要翻译的英文段落。"></textarea>
+      <button id="analyzeBtn" class="primary">翻译并解释</button>
+      <p id="status" class="status">等待输入</p>
+    </aside>
+    <article id="result"><div class="empty">结果会按原文的标题、段落和方法对比顺序呈现。</div></article>
+  </main>
+  <script src="assistant.js"></script>
+</body>
+</html>

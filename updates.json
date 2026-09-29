@@ -1,0 +1,19 @@
+{
+  "addons": {
+    "paper-assistant@local": {
+      "updates": [
+        {
+          "update_hash": "sha256:25f8626de82962b4b730247bd58a3a390b6bcdbd86bff21bb06778ddd3d93182",
+          "update_link": "https://raw.githubusercontent.com/chaojilanyangyang888/zetero/main/paper-assistant.xpi",
+          "applications": {
+            "zotero": {
+              "strict_min_version": "10.0",
+              "strict_max_version": "10.*"
+            }
+          },
+          "version": "0.1.2"
+        }
+      ]
+    }
+  }
+}
