@@ -6,6 +6,25 @@ let retryTimer;
 let contextItem;
 let toolbarButton;
 let pluginRootURI;
+let menuRegistrations = [];
+
+function registerModernMenus() {
+  if (!Zotero.MenuManager?.registerMenu) return;
+  const menuData = {
+    menuType: "menuitem",
+    onShown: (event, context) => context.menuElem.setAttribute("label", "翻译与解释论文"),
+    onCommand: () => openAssistant()
+  };
+  for (const target of ["main/library/item", "main/menubar/tools"]) {
+    const id = Zotero.MenuManager.registerMenu({
+      menuID: `paper-assistant-${target.replaceAll("/", "-")}`,
+      pluginID: "paper-assistant@local",
+      target,
+      menus: [{ ...menuData }]
+    });
+    if (id) menuRegistrations.push(id);
+  }
+}
 
 function pref(name, fallback = "") {
   try {
@@ -148,6 +167,7 @@ function addToWindow(win) {
 function startup({ rootURI }) {
   pluginRootURI = rootURI;
   Zotero.debug("Paper Format Translator: startup " + rootURI);
+  registerModernMenus();
   const windows = typeof Zotero.getMainWindows === "function" ? Zotero.getMainWindows() : [Zotero.getMainWindow()];
   for (const win of windows) addToWindow(win);
 }
@@ -160,6 +180,10 @@ function shutdown() {
   if (menuItem) { menuItem.remove(); menuItem = null; }
   if (contextItem) { contextItem.remove(); contextItem = null; }
   if (toolbarButton) { toolbarButton.remove(); toolbarButton = null; }
+  if (Zotero.MenuManager?.unregisterMenu) {
+    for (const id of menuRegistrations) Zotero.MenuManager.unregisterMenu(id);
+  }
+  menuRegistrations = [];
   pluginRootURI = null;
 }
 function uninstall() {}
