@@ -116,6 +116,7 @@ function openAssistant() {
 function install() {}
 function addToWindow(win) {
   if (!win) return;
+  Zotero.debug("Paper Format Translator: adding Zotero 10 entry points");
   const toolsMenu = win.document.querySelector("#menu_ToolsPopup");
   if (toolsMenu && !menuItem) {
     menuItem = win.document.createXULElement("menuitem");
@@ -124,7 +125,7 @@ function addToWindow(win) {
     menuItem.addEventListener("command", openAssistant);
     toolsMenu.appendChild(menuItem);
   }
-  const itemMenu = win.document.querySelector("#zotero-itemmenu");
+  const itemMenu = win.document.querySelector("#zotero-itemmenu, #zotero-itemmenu-popup, #zotero-items-menu");
   if (itemMenu && !contextItem) {
     contextItem = win.document.createXULElement("menuitem");
     contextItem.id = "paper-assistant-context-item";
@@ -132,7 +133,7 @@ function addToWindow(win) {
     contextItem.addEventListener("command", openAssistant);
     itemMenu.appendChild(contextItem);
   }
-  const toolbar = win.document.querySelector("#zotero-toolbar, #zotero-items-toolbar");
+  const toolbar = win.document.querySelector("#zotero-toolbar, #zotero-items-toolbar, #zotero-items-toolbar-container, toolbar[is='customizable-toolbar']");
   if (toolbar && !toolbarButton) {
     toolbarButton = win.document.createXULElement("toolbarbutton");
     toolbarButton.id = "paper-assistant-toolbar-button";
@@ -146,9 +147,12 @@ function addToWindow(win) {
 }
 function startup({ rootURI }) {
   pluginRootURI = rootURI;
-  for (const win of Zotero.getMainWindows()) addToWindow(win);
+  Zotero.debug("Paper Format Translator: startup " + rootURI);
+  const windows = typeof Zotero.getMainWindows === "function" ? Zotero.getMainWindows() : [Zotero.getMainWindow()];
+  for (const win of windows) addToWindow(win);
 }
 function onMainWindowLoad({ window }) {
+  Zotero.debug("Paper Format Translator: main window loaded");
   addToWindow(window);
 }
 function shutdown() {
