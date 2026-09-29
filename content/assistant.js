@@ -1,4 +1,4 @@
-const api = window.arguments?.[0];
+const api = window.arguments?.[0] || window.paperAssistantAPI || window.parent?.arguments?.[0] || window.top?.arguments?.[0];
 const $ = (id) => document.getElementById(id);
 const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
 

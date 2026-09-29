@@ -134,7 +134,7 @@ function openAssistant() {
   try {
     const parent = Zotero.getMainWindow();
     Zotero.debug("Paper Format Translator: opening assistant dialog");
-    const dialog = parent.openDialog("chrome://paper-assistant/content/assistant.html", "paper-assistant", "chrome,dialog,centerscreen,resizable,width=1280,height=850", api);
+    const dialog = parent.openDialog("chrome://paper-assistant/content/assistant.xhtml", "paper-assistant", "chrome,dialog,centerscreen,resizable,width=1280,height=850", api);
     if (dialog) dialog.focus();
   } catch (error) {
     Zotero.debug("Paper Format Translator: dialog error " + error);
