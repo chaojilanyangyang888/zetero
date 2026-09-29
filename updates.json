@@ -4,8 +4,8 @@
       "updates": [
         {
           "update_link": "https://raw.githubusercontent.com/chaojilanyangyang888/zetero/main/paper-assistant.xpi",
-          "update_hash": "sha256:71b7400c844e37af675adb4b0e70ee1268cb85cec2a4b0f909e513851ce266f6",
-          "version": "0.1.6",
+          "update_hash": "sha256:2cd18802a59844af0121a0d25ac727ec3a6de2a3dc997bf1d7c271d53ed310c6",
+          "version": "0.1.7",
           "applications": {
             "zotero": {
               "strict_max_version": "10.*",

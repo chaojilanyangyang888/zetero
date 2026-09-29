@@ -109,8 +109,10 @@ You are the local Codex analysis stage. Preserve section order, paragraph bounda
 }
 
 function openAssistant() {
+  Zotero.debug("Paper Format Translator: command received");
   const item = getSelectedItem();
   if (!item) {
+    Zotero.debug("Paper Format Translator: no selected item");
     Services.prompt.alert(null, "Paper Format Translator", "请先选择一篇论文或 PDF 附件。");
     return;
   }
@@ -129,8 +131,14 @@ function openAssistant() {
     },
     defaults: options
   };
-  const parent = Zotero.getMainWindow();
-  parent.openDialog("chrome://paper-assistant/content/assistant.html", "paper-assistant", "chrome,dialog,centerscreen,resizable,width=1280,height=850", api);
+  try {
+    const parent = Zotero.getMainWindow();
+    Zotero.debug("Paper Format Translator: opening assistant dialog");
+    parent.openDialog("chrome://paper-assistant/content/assistant.html", "paper-assistant", "chrome,dialog,centerscreen,resizable,width=1280,height=850", api);
+  } catch (error) {
+    Zotero.debug("Paper Format Translator: dialog error " + error);
+    Services.prompt.alert(null, "Paper Format Translator", "无法打开翻译窗口：" + error);
+  }
 }
 
 function install() {}
