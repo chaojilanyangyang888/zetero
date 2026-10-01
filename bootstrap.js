@@ -143,9 +143,12 @@ function openAssistant() {
     Object.assign(close.style, { position: "absolute", right: "8px", top: "8px", zIndex: "2", padding: "6px 12px", cursor: "pointer" });
     close.onclick = () => { overlay.remove(); overlay = null; };
     const frame = parent.document.createElement("iframe");
-    frame.setAttribute("type", "content");
     Object.assign(frame.style, { width: "100%", height: "100%", border: "0" });
-    frame.onload = () => { try { frame.contentWindow.wrappedJSObject.paperAssistantAPI = api; } catch (e) { Zotero.debug("Paper Format Translator: API injection error " + e); } };
+    frame.onload = () => {
+      Zotero.debug("Paper Format Translator: assistant page loaded");
+      try { frame.contentWindow.wrappedJSObject.paperAssistantAPI = api; } catch (e) { Zotero.debug("Paper Format Translator: API injection error " + e); }
+    };
+    frame.onerror = () => Zotero.debug("Paper Format Translator: assistant page load error");
     frame.src = pluginRootURI + "content/assistant.html";
     overlay.append(close, frame);
     parent.document.documentElement.appendChild(overlay);
