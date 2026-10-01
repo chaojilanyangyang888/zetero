@@ -7,6 +7,7 @@ let contextItem;
 let toolbarButton;
 let pluginRootURI;
 let menuRegistrations = [];
+let overlay;
 
 function registerModernMenus() {
   if (!Zotero.MenuManager?.registerMenu) return;
@@ -133,11 +134,24 @@ function openAssistant() {
   };
   try {
     const parent = Zotero.getMainWindow();
-    Zotero.debug("Paper Format Translator: opening assistant dialog");
-    const dialog = parent.openDialog("chrome://paper-assistant/content/assistant.xhtml", "paper-assistant", "chrome,dialog,centerscreen,resizable,width=1280,height=850", api);
-    if (dialog) dialog.focus();
+    if (overlay) overlay.remove();
+    overlay = parent.document.createElement("div");
+    overlay.id = "paper-assistant-overlay";
+    Object.assign(overlay.style, { position: "fixed", inset: "24px", zIndex: "2147483647", background: "white", border: "1px solid #78909c", boxShadow: "0 8px 30px rgba(0,0,0,.35)" });
+    const close = parent.document.createElement("button");
+    close.textContent = "关闭";
+    Object.assign(close.style, { position: "absolute", right: "8px", top: "8px", zIndex: "2", padding: "6px 12px", cursor: "pointer" });
+    close.onclick = () => { overlay.remove(); overlay = null; };
+    const frame = parent.document.createElement("iframe");
+    frame.setAttribute("type", "content");
+    Object.assign(frame.style, { width: "100%", height: "100%", border: "0" });
+    frame.onload = () => { try { frame.contentWindow.wrappedJSObject.paperAssistantAPI = api; } catch (e) { Zotero.debug("Paper Format Translator: API injection error " + e); } };
+    frame.src = "chrome://paper-assistant/content/assistant.html";
+    overlay.append(close, frame);
+    parent.document.documentElement.appendChild(overlay);
+    Zotero.debug("Paper Format Translator: assistant overlay shown");
   } catch (error) {
-    Zotero.debug("Paper Format Translator: dialog error " + error);
+    Zotero.debug("Paper Format Translator: overlay error " + error);
     Services.prompt.alert(null, "Paper Format Translator", "无法打开翻译窗口：" + error);
   }
 }
@@ -190,6 +204,7 @@ function shutdown() {
   if (menuItem) { menuItem.remove(); menuItem = null; }
   if (contextItem) { contextItem.remove(); contextItem = null; }
   if (toolbarButton) { toolbarButton.remove(); toolbarButton = null; }
+  if (overlay) { overlay.remove(); overlay = null; }
   if (Zotero.MenuManager?.unregisterMenu) {
     for (const id of menuRegistrations) Zotero.MenuManager.unregisterMenu(id);
   }

@@ -3,15 +3,15 @@
     "paper-assistant@local": {
       "updates": [
         {
-          "update_link": "https://raw.githubusercontent.com/chaojilanyangyang888/zetero/main/paper-assistant.xpi",
-          "version": "0.2.0",
-          "update_hash": "sha256:6a20a7060ef3638ffea69b9dc13ed77cda1e1bbd0f99571797f83758aba8a241",
           "applications": {
             "zotero": {
               "strict_min_version": "10.0",
               "strict_max_version": "10.*"
             }
-          }
+          },
+          "version": "0.2.1",
+          "update_link": "https://raw.githubusercontent.com/chaojilanyangyang888/zetero/main/paper-assistant.xpi",
+          "update_hash": "sha256:2380cb63f0320475b62a28b387a0c07181c932b9f7772a96aea50c52710534fa"
         }
       ]
     }

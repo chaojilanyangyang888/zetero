@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Paper Format Translator",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Keep English paper structure while translating and explaining comparison methods.",
   "applications": {
     "zotero": {
