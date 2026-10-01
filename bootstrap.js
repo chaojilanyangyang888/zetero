@@ -146,7 +146,7 @@ function openAssistant() {
     frame.setAttribute("type", "content");
     Object.assign(frame.style, { width: "100%", height: "100%", border: "0" });
     frame.onload = () => { try { frame.contentWindow.wrappedJSObject.paperAssistantAPI = api; } catch (e) { Zotero.debug("Paper Format Translator: API injection error " + e); } };
-    frame.src = "chrome://paper-assistant/content/assistant.html";
+    frame.src = pluginRootURI + "content/assistant.html";
     overlay.append(close, frame);
     parent.document.documentElement.appendChild(overlay);
     Zotero.debug("Paper Format Translator: assistant overlay shown");
@@ -198,6 +198,12 @@ function startup({ rootURI }) {
 function onMainWindowLoad({ window }) {
   Zotero.debug("Paper Format Translator: main window loaded");
   addToWindow(window);
+}
+function onMainWindowUnload({ window }) {
+  if (overlay && overlay.ownerDocument === window.document) { overlay.remove(); overlay = null; }
+  if (menuItem) { menuItem.remove(); menuItem = null; }
+  if (contextItem) { contextItem.remove(); contextItem = null; }
+  if (toolbarButton) { toolbarButton.remove(); toolbarButton = null; }
 }
 function shutdown() {
   if (retryTimer) clearTimeout(retryTimer);
