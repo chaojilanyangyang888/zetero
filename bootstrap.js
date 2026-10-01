@@ -144,12 +144,24 @@ function openAssistant() {
     close.onclick = () => { overlay.remove(); overlay = null; };
     const frame = parent.document.createElement("iframe");
     Object.assign(frame.style, { width: "100%", height: "100%", border: "0" });
-    frame.onload = () => {
-      Zotero.debug("Paper Format Translator: assistant page loaded");
-      try { frame.contentWindow.wrappedJSObject.paperAssistantAPI = api; } catch (e) { Zotero.debug("Paper Format Translator: API injection error " + e); }
+    frame.onload = async () => {
+      try {
+        frame.contentWindow.wrappedJSObject.paperAssistantAPI = api;
+        const [html, css, js] = await Promise.all([
+          fetch(pluginRootURI + "content/assistant.html").then((r) => r.text()),
+          fetch(pluginRootURI + "content/assistant.css").then((r) => r.text()),
+          fetch(pluginRootURI + "content/assistant.js").then((r) => r.text())
+        ]);
+        const documentHTML = html.replace(/<link[^>]+assistant\.css[^>]*>/i, `<style>${css}</style>`).replace(/<script[^>]+assistant\.js[^>]*><\/script>/i, `<script>${js.replace(/<\/script>/gi, "<\\/script>")}<\/script>`);
+        const doc = frame.contentDocument;
+        doc.open(); doc.write(documentHTML); doc.close();
+        Zotero.debug("Paper Format Translator: assistant page loaded");
+      } catch (e) {
+        Zotero.debug("Paper Format Translator: assistant page load error " + e);
+        frame.contentDocument.body.textContent = "翻译页面加载失败：" + e;
+      }
     };
-    frame.onerror = () => Zotero.debug("Paper Format Translator: assistant page load error");
-    frame.src = pluginRootURI + "content/assistant.html";
+    frame.src = "about:blank";
     overlay.append(close, frame);
     parent.document.documentElement.appendChild(overlay);
     Zotero.debug("Paper Format Translator: assistant overlay shown");
